@@ -2,6 +2,8 @@ require('sucrase/register/jsx');
 
 const express = require('express');
 
+const bodyParser = require('body-parser');
+
 const React = require('react');
 
 const app = express();
@@ -24,8 +26,7 @@ const { notes } = require('./views/notes.jsx')
 
 // app.use(logger('dev'));
 
-app.use(express.json());
-
+app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
@@ -37,8 +38,6 @@ app.get('/', function (req, res){
         const html = ReactDomServer.renderToString(
             React.createElement(notes) ) 
         res.send(html);
-     
-
     }
     else {
         const landingPage = ReactDomServer.renderToString(
@@ -49,6 +48,21 @@ app.get('/', function (req, res){
     
 })
 
+app.post('/', function (req, res) {
+    
+    res.send('hello  ' + req.body.title),
+    res.send(req.body.thingsToDo)
+})
+// app.get('/home', function (req, res){  
+//     const userName = req.query['userName']
+    
+//     const notesHtml = ReactDomServer.renderToString(
+//         React.createElement(notes) )
+//         res.send(notesHtml)
+//         console.log(userName)
+        
+    
+// })    
 
 
 
