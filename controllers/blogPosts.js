@@ -7,7 +7,7 @@ exports.index = function (req, res){
 
 exports.create = function (req, res) {
     var newBlogPost = new BlogPost(req.body);
-    console.log(req.body);
+    // console.log(req.body);
     newBlogPost.save(function (err) {
             if(err) {
             res.status(400).send('Unable to save post to database');

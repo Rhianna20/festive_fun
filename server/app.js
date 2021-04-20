@@ -28,6 +28,10 @@ const { home } = require('./views/home.jsx')
 
 const { notes } = require('./views/notes.jsx')
 
+const Post = require('../models/post');
+
+const { mainPage }  = require('./views/mainPage');
+
 
 // app.use(logger('dev'));
 
@@ -51,7 +55,7 @@ app.set('view engine', 'pug');
 
 
 
-app.get('/', function (req, res){
+app.get('/', async function (req, res){
   
     const userName = req.query['userName']
     console.log(req.query['userName'])
@@ -59,8 +63,11 @@ app.get('/', function (req, res){
     if (userName){
         const html = ReactDomServer.renderToString(
             React.createElement(notes) ) 
+        const posts = await Post.find();
         res.send(html);
-        console.log(req.params['userName'])
+        console.log(posts)
+        
+        // console.log(req.params['userName'])
     }
     else {
         const landingPage = ReactDomServer.renderToString(
@@ -74,20 +81,60 @@ app.get('/', function (req, res){
 
 
 // Create a post
-app.post('/notebook', function (req, res) {
+app.post('/notebook', async function (req, res) {
   
-    // const toDo =  pool.query("INSERT INTO notePosts (title) VALUES ('Ms Jackson') (things_to_do) VALUES ('stick to a bloody diet')")
-    // [thingsTodo]
-    // res.json(notePost.row[0])
+    const post = new Post({
+        title: req.body.title,
+        thingsToDo: req.body.thingsToDo
+    })
+    await post.save()
+    res.send(post)
+    console.log(post)
   
-    let notePost = req.body;
+    // let notePost = req.body;
     // notePost.id = notePost.length +1;
     // notePost.push(notePost)
-    res.send(notePost)
-    console.log(req.body)
+    // res.send(notePost)
+    // console.log(req.body)
     
 })
 
+
+//get indivdual posts
+router.get('/posts/:id', async (req, res) =>{
+    const post = await Post.findOne({_id: req.params.id})
+    res.send(post)
+})
+
+//uodate posts
+
+router.patch('/post/:id', async (req, res) =>{
+    try{
+        const post = await Post.findOne({_id: req.params.id})
+        if (req.body.title) {
+            post.title = req.body.title
+        }
+        if (req.body.thingsToDo){
+            post.content = req.body.thingsToDo
+        }
+        await post.save()
+        res.send(post)
+    }
+    catch{
+        res.status(404)
+        res.send({error: "post doesnt exist"})
+    }
+})
+
+router.delete('/posts/:id', async (req, res) =>{
+    try {
+        await Post.deleteOne({ _id: req.params.id})
+        res.status(204).send(mainPage)
+    } catch{
+        res.status(404)
+        res.send({error: "post doesnt exist!"})
+    }
+})
 // Get all the note posts
 
 // app.get('/:id', async(req, res) => {

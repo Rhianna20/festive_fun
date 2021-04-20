@@ -15,6 +15,9 @@ const notes = (props) => {
         {props.thingsToDo}
         {props.title}
         {props.userName}
+        {props.post}
+        {props.post}
+
         </div>
         
     );

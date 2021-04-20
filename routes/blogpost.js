@@ -1,11 +1,22 @@
-const express = require('express');
-const mongoose = require('mongoose');
+// const express = require('express');
+// const mongoose = require('mongoose');
+// const router = express.Router();
+// const Post = require('../models/post')
 
+// //get all posts
+// router.get('/noteposts', async (req, res) =>{
+//     const posts = await Post.find()
+//     res.send(posts)
+// })
 
-//connect to mongoDB 
-mongoose.connect('mongodb://localhost:27017/funDb', { useNewUrlParser: true})
-.then(() =>{
-    const app = express();
+// //create post
+// router.post('/notepost', async (req, res) => {
+//     const post = new Post({
+//         title: req.body.title,
+//         thingsToDo: req.body.thingsToDo,
+//     })
+//     await post.save()
+//     res.send(post)
+// })
 
-    console.log('database connected')
-})
+// module.exports = router;
